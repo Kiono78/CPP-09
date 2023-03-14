@@ -12,12 +12,15 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	else if (file.is_open()) {
-		std::string	line;
+		std::map<std::string, std::string>	data;
+		std::string							line;
 		while (std::getline(file, line)) {
 			// std::cout << line << std::endl;
 			std::stringstream	ss(line);
 			while (ss.good()) {
-				std::cout << ss << std::endl;
+				std::string field;
+				std::getline(ss, field, ',');
+				std::cout << line << std::endl;
 			}
 		}
 		file.close();
