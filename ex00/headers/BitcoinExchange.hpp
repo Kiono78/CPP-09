@@ -5,5 +5,7 @@
 # include <map>
 # include <fstream>
 # include <sstream>
+# include <ctime>
+# include <cstring>
 
 #endif
