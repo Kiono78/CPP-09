@@ -44,7 +44,7 @@ std::string	checkDate(std::string date_str) {
 }
 
 std::string	checkValue(std::string value, std::string valuation) {
-	if (value.at(0) == '-')
+	if (value.empty() || value.at(0) == '-')
 		throw std::runtime_error("Error: not a positive number.");
 	std::stringstream	ss_quantity(value);
 	std::stringstream	ss_price(valuation);
@@ -74,6 +74,12 @@ void	readInput(char *filename, std::map<std::string, std::string> &data) {
 			std::getline(ss, date, ' ');
 			std::getline(ss, pipe, ' ');
 			std::getline(ss, value);
+			// if (date.find_first_not_of(" ") || date.find_last_not_of(" ")
+			// 	|| value.find_first_not_of(" ") || value.find_last_not_of(" ")) {
+			if (date.find(" ") !=  std::string::npos || value.find(" ") != std::string::npos) {
+				std::cout << "Error: format, leading or trailing spaces" << std::endl;
+				continue;
+			}
 			if (date == "date" && value == "value")
 				continue;
 			try {
