@@ -8,10 +8,8 @@ void loadDataMap(std::map<std::string, std::string> &data)
 	else if (file.is_open()) {
 		std::string	line;
 		std::getline(file, line);
-		while (std::getline(file, line)) {
-			//std::stringstream	ss(line);
+		while (std::getline(file, line))
 			data[line.substr(0, line.find(','))] = line.substr(line.find(',') + 1, line.length());
-		}
 		file.close();
 	}
 	else
@@ -61,8 +59,9 @@ std::string	checkValue(std::string value, std::string valuation) {
 }
 
 void	readInput(char *filename, std::map<std::string, std::string> &data) {
-	std::ifstream	file(filename);
-	std::map<std::string, std::string>::iterator it;
+	std::ifstream									file(filename);
+	std::map<std::string, std::string>::iterator 	it;
+	bool											header_accepted = true;
 	if (file.fail())
 		throw std::runtime_error("Error: could not open file.");
 	else if (file.is_open()) {
@@ -74,14 +73,13 @@ void	readInput(char *filename, std::map<std::string, std::string> &data) {
 			std::getline(ss, date, ' ');
 			std::getline(ss, pipe, ' ');
 			std::getline(ss, value);
-			// if (date.find_first_not_of(" ") || date.find_last_not_of(" ")
-			// 	|| value.find_first_not_of(" ") || value.find_last_not_of(" ")) {
 			if (date.find(" ") !=  std::string::npos || value.find(" ") != std::string::npos) {
 				std::cout << "Error: format, leading or trailing spaces" << std::endl;
 				continue;
 			}
-			if (date == "date" && value == "value")
+			if (header_accepted && date == "date" && value == "value")
 				continue;
+			header_accepted = false;
 			try {
 				output << checkDate(date);
 				output << " => ";
@@ -106,7 +104,6 @@ int main(int argc, char **argv) {
 		std::cout << "Error: could not open file." << std::endl;
 		return 1;
 	}
-	//encapsuler tout le programme dans ce try ??
 	try {
 		loadDataMap(data);
 	}

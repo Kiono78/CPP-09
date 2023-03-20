@@ -20,6 +20,10 @@ int parse_expression(char *arguments) {
 
 		if (std::istringstream(token) >> operand && operand < 10 && operand >= 0)
 			operand_stack.push(operand);
+		else if (std::istringstream(token) >> operand && operand < 100 && operand >= 10) {
+			operand_stack.push(operand / 10);
+			operand_stack.push(operand % 10);
+		}
 		else if (token.length() == 1 && std::string("+-*/").find(token) != std::string::npos) {
 			if (operand_stack.size() < 2) //or != 2
 				throw std::invalid_argument("Missing operands before operator");
