@@ -1,18 +1,17 @@
 #include "../headers/PmergeMe.hpp"
 
 void check_input(int argc,char **argv, std::vector<size_t>	&vector) {
-	size_t nb;
+	unsigned long	 nb;
 	for (int i = 1; i < argc; i++) {
 		for (int k = 0; argv[i][k]; k++) {
 			if (!std::isdigit(argv[i][k])) {
 				throw std::runtime_error("");
 			}
 		}
-		//is that a dynamic cast, is it ok ? Should I add it to static
-		nb = std::strtoull(argv[i], NULL, 10);
+		nb = std::strtoul(argv[i], NULL, 10);
 		if (errno == ERANGE && nb == ULLONG_MAX) 
 			throw std::runtime_error("");
-		vector.push_back(nb);
+		vector.push_back(static_cast<size_t>(nb));
 	}
 }
 
@@ -38,8 +37,12 @@ int main(int argc, char **argv) {
 	mergeInsertSort(vector, 5);
 	clock_t	end_vector = clock();
 	clock_t	start_deque = clock();
-	mergeInsertSort(vector, 5);
+	mergeInsertSort(deque, 5);
 	clock_t	end_deque = clock();
+	if (!isSorted(vector) || !isSorted(deque)) {
+		std::cout << "Sorting failed" << std::endl;
+		return 1;
+	}
 	double elapsed_time_vector = (double)(end_vector - start_vector) / (double)CLOCKS_PER_SEC * 1000000.0;
 	double elapsed_time_deque = (double)(end_deque - start_deque) / (double)CLOCKS_PER_SEC * 1000000.0;
 	std::cout << "After: ";
