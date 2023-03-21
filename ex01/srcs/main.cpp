@@ -18,9 +18,9 @@ int parse_expression(char *arguments) {
 	while (tokens >> token) {
 		int	operand;
 
-		if (std::istringstream(token) >> operand && operand < 10 && operand >= 0)
+		if (std::istringstream(token) >> operand && operand < 10 && operand > -10)
 			operand_stack.push(operand);
-		else if (std::istringstream(token) >> operand && operand < 100 && operand >= 10) {
+		else if (std::istringstream(token) >> operand && ((operand < 100 && operand >= 10) || (operand > -100 && operand <= -10))) {
 			operand_stack.push(operand / 10);
 			operand_stack.push(operand % 10);
 		}
