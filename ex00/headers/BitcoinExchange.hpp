@@ -7,5 +7,6 @@
 # include <sstream>
 # include <ctime>
 # include <cstring>
+# include <string>
 
 #endif

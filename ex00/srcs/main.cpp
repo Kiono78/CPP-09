@@ -41,9 +41,27 @@ std::string	checkDate(std::string date_str) {
 	return date_str;
 }
 
+size_t	countOccurences(std::string str, std::string chars) {
+	size_t count = 0;
+	for (size_t i = 0; i < str.length(); i++) {
+		for (size_t j = 0; j < chars.length(); j++) {
+			if (str[i] == chars[j])
+				count++;
+		}
+	}
+	return count;
+}
+
 std::string	checkValue(std::string value, std::string valuation) {
 	if (value.empty() || value.at(0) == '-')
 		throw std::runtime_error("Error: not a positive number.");
+	else if (size_t decimal_sep = countOccurences(value, ".,")) {
+		if (decimal_sep > 1)
+			throw std::runtime_error("Error: bad input => " + value);
+		if (value.find(',') != std::string::npos)
+			value[value.find(',')] = '.';
+	}
+	//replace 
 	std::stringstream	ss_quantity(value);
 	std::stringstream	ss_price(valuation);
 	std::stringstream	output;
@@ -73,17 +91,26 @@ void	readInput(char *filename, std::map<std::string, std::string> &data) {
 			std::getline(ss, date, ' ');
 			std::getline(ss, pipe, ' ');
 			std::getline(ss, value);
+			if (header_accepted && date == "date" && value == "value") {
+				header_accepted = false;
+				continue;
+			}
+			header_accepted = false;
 			if (date.find(" ") !=  std::string::npos || value.find(" ") != std::string::npos) {
 				std::cout << "Error: format, leading or trailing spaces" << std::endl;
 				continue;
 			}
-			if (header_accepted && date == "date" && value == "value")
-				continue;
-			header_accepted = false;
+			else {
+				for (size_t i = 0; i < value.length(); i++) {
+					if (!std::isdigit(value[i]) && value[i] != '.' && value[i] != ',') {
+						std::cout << "value in input file must be a number" << std::endl;
+						break;
+					}
+				}
+			}
 			try {
 				output << checkDate(date);
 				output << " => ";
-				//does it work before or after this date
 				it = data.lower_bound(date);
 				if (it != data.begin())
 					--it;
