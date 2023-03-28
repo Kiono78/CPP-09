@@ -80,8 +80,11 @@ void	readInput(char *filename, std::map<std::string, std::string> &data) {
 	std::ifstream									file(filename);
 	std::map<std::string, std::string>::iterator 	it;
 	bool											header_accepted = true;
+	struct stat sb;
 	if (file.fail())
 		throw std::runtime_error("Error: could not open file.");
+    else if (stat(filename, &sb) == 0 && S_ISDIR(sb.st_mode))
+        throw std::runtime_error("Error: could not open file.");
 	else if (file.is_open()) {
 		std::string	line;
 		std::string	date, value, pipe;
