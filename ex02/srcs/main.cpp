@@ -1,6 +1,6 @@
 #include "../headers/PmergeMe.hpp"
 
-void check_input(int argc,char **argv, std::vector<size_t>	&vector) {
+void check_input(int argc,char **argv, std::vector<unsigned int>	&vector) {
 	unsigned long	 nb;
 	for (int i = 1; i < argc; i++) {
 		for (int k = 0; argv[i][k]; k++) {
@@ -11,7 +11,9 @@ void check_input(int argc,char **argv, std::vector<size_t>	&vector) {
 		nb = std::strtoul(argv[i], NULL, 10);
 		if (errno == ERANGE && nb == ULLONG_MAX) 
 			throw std::runtime_error("");
-		vector.push_back(static_cast<size_t>(nb));
+		else if (nb > UINT_MAX)
+			throw std::runtime_error("");
+		vector.push_back(static_cast<unsigned int>(nb));
 	}
 }
 
@@ -20,8 +22,8 @@ int main(int argc, char **argv) {
 		std::cout << "Error" << std::endl;
 		return 1;
 	}
-	size_t	nb_arguments = argc - 1;
-	std::vector<size_t>	vector;
+	unsigned int				nb_arguments = argc - 1;
+	std::vector<unsigned int>	vector;
 	try {
 		check_input(argc, argv, vector);
 	}
@@ -29,7 +31,7 @@ int main(int argc, char **argv) {
 		std::cout << "Error" << std::endl;
 		return 1;
 	}
-	std::deque<size_t>	deque(vector.begin(), vector.end());
+	std::deque<unsigned int>	deque(vector.begin(), vector.end());
 	std::cout << "Before: ";
 	//Dear corrector, feel free to change the below line to printContainer(deque);
 	printContainer(vector);
@@ -52,3 +54,4 @@ int main(int argc, char **argv) {
 	std::cout << "Time to process a range of " << nb_arguments << " elements with std::deque : " << elapsed_time_deque << " us" << std::endl;
 	return 0;
 }
+
