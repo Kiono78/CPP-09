@@ -41,33 +41,16 @@ std::string	checkDate(std::string date_str) {
 	return date_str;
 }
 
-size_t	countOccurences(std::string str, std::string chars) {
-	size_t count = 0;
-	for (size_t i = 0; i < str.length(); i++) {
-		for (size_t j = 0; j < chars.length(); j++) {
-			if (str[i] == chars[j])
-				count++;
-		}
-	}
-	return count;
-}
-
 std::string	checkValue(std::string value, std::string valuation) {
 	if (value.empty() || value.at(0) == '-')
 		throw std::runtime_error("Error: not a positive number.");
-	else if (size_t decimal_sep = countOccurences(value, ".,")) {
-		if (decimal_sep > 1)
-			throw std::runtime_error("Error: bad input => " + value);
-		if (value.find(',') != std::string::npos)
-			value[value.find(',')] = '.';
-	}
 	//replace 
 	std::stringstream	ss_quantity(value);
 	std::stringstream	ss_price(valuation);
 	std::stringstream	output;
 	float				quantity, price;
 	ss_quantity >> quantity;
-	if (quantity >= 1000)
+	if (quantity > 1000)
 		throw std::runtime_error("Error: too large a number.");
 	ss_price >> price;
 	output << quantity;
@@ -104,12 +87,16 @@ void	readInput(char *filename, std::map<std::string, std::string> &data) {
 				continue;
 			}
 			else {
+				bool	unauthorized_char = false;
 				for (size_t i = 0; i < value.length(); i++) {
-					if (!std::isdigit(value[i]) && value[i] != '.' && value[i] != ',') {
-						std::cout << "value in input file must be a number" << std::endl;
+					if (!std::isdigit(value[i])) {
+						std::cout << "value must be a number" << std::endl;
+						unauthorized_char = true;
 						break;
 					}
 				}
+				if (unauthorized_char)
+						break;
 			}
 			try {
 				output << checkDate(date);
