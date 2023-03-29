@@ -115,7 +115,7 @@ void	readInput(char *filename, std::map<std::string, std::string> &data) {
 				output << checkDate(date);
 				output << " => ";
 				it = data.lower_bound(date);
-				if (it != data.begin())
+				if (it != data.begin() && it->first != date)
 					--it;
 				output << checkValue(value, it->second) << std::endl;
 			}

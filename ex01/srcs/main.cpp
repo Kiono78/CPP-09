@@ -27,15 +27,17 @@ int parse_expression(char *arguments) {
 		else if (token.length() == 1 && std::string("+-*/").find(token) != std::string::npos) {
 			if (operand_stack.size() < 2) //or != 2
 				throw std::invalid_argument("Missing operands before operator");
-			int second = operand_stack.top();
-			operand_stack.pop();
 			int first = operand_stack.top();
+			operand_stack.pop();
+			int second = operand_stack.top();
 			operand_stack.pop();
 			operand_stack.push(compute_element(token[0], first, second));
 		}
 		else
 			throw std::invalid_argument("cannot parse expression");
 	}
+	if (operand_stack.size() != 1)
+		throw std::invalid_argument("Missing operators");
 	return operand_stack.top();
 }
 

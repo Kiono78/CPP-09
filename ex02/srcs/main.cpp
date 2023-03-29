@@ -36,10 +36,10 @@ int main(int argc, char **argv) {
 	//Dear corrector, feel free to change the below line to printContainer(deque);
 	printContainer(vector);
 	clock_t	start_vector = clock();
-	mergeInsertSort(vector, 5);
+	mergeInsertSort(vector, 20);
 	clock_t	end_vector = clock();
 	clock_t	start_deque = clock();
-	mergeInsertSort(deque, 5);
+	mergeInsertSort(deque, 20);
 	clock_t	end_deque = clock();
 	if (!isSorted(vector) || !isSorted(deque)) {
 		std::cout << "Sorting failed" << std::endl;
@@ -54,4 +54,3 @@ int main(int argc, char **argv) {
 	std::cout << "Time to process a range of " << nb_arguments << " elements with std::deque : " << elapsed_time_deque << " us" << std::endl;
 	return 0;
 }
-
